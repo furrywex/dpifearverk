@@ -1,4 +1,3 @@
-```markdown
 <div align="center">
 
 # ⚡ FearverkDPI
@@ -20,14 +19,14 @@
 ## 🌐 English
 
 ### 📖 Overview
-**FearverkDPI** is a native, low-latency DPI circumvention engine built in modern C++ with `WinDivert`. Unlike slow commercial VPNs, FearverkDPI does **not** route your traffic through foreign servers. It operates locally on raw packet streams to fragment TLS SNI records, drop QUIC/UDP streams, and inject fake TCP packets with short TTL directly in kernel space.
+**FearverkDPI** is a native, low-latency DPI circumvention engine written in modern C++ utilizing the `WinDivert` kernel architecture. Unlike conventional VPNs, FearverkDPI **does not** route your traffic through remote relays. It manipulates local raw packet streams on the fly by fragmenting TLS SNI buffers, dropping HTTP/3 QUIC (UDP 443) streams, and injecting desynchronized low-TTL fake TCP packets.
 
 ### ✨ Key Features
-* 🚀 **Zero-Lag & Full Bandwidth:** 100% direct connection speed without third-party proxy bottlenecks.
-* 🎬 **Instant 4K YouTube Playback:** Automatic UDP 443 (QUIC) drop to force browsers into resilient TCP mode.
-* 🛡️ **Advanced TLS De-synchronization:** Real-time ClientHello SNI splitting and low-TTL fake packet injection.
-* 🎮 **Full Gaming & Voice Support:** Fixes voice channels in Discord, connection drops in Roblox Studio (Team Create), and blocked web endpoints.
-* 📊 **Terminal User Interface (TUI):** Built-in telemetry tracking latency, live packet mutations, and domain hit rates.
+* 🚀 **Zero Latency & 100% Bandwidth:** Pure ISP wire speed without proxy latency or bandwidth throttling.
+* 🎬 **Instant 4K YouTube Playback:** Drops UDP 443 packets to seamlessly force browsers onto fragmented TCP.
+* 🛡️ **Precise TLS Desynchronization:** Deep byte-level SNI parser with middle-split segmentation and low-TTL fake injection.
+* 🎮 **Full Voice & Gaming Compatibility:** Eliminates voice issues in Discord, fixes Roblox Studio Team Create disconnects, and unblocks restricted web endpoints.
+* 📊 **Interactive TUI Dashboard:** Real-time terminal UI displaying live gateway ping, domain hit counters, and packet modification telemetry.
 
 ---
 
@@ -36,108 +35,106 @@
 ```text
 FearverkDPI/
 ├── bin/
-│   └── FearverkDPI.exe       # Precompiled core binary
+│   └── FearverkDPI.exe       # Compiled binary
 ├── libs/
 │   ├── windivert.h           # Header files
-│   ├── WinDivert.lib         # Import library
+│   ├── WinDivert.lib         # Static library
 │   ├── WinDivert.dll         # User-mode library
 │   └── WinDivert64.sys       # Signed kernel driver
 ├── src/
-│   └── FearverkDPI.cpp       # Main C++ engine source
-├── general.bat               # Auto Mode (Fastest node selection)
+│   └── FearverkDPI.cpp       # Core source code
+├── general.bat               # Auto Mode (Fastest gateway selection)
 ├── general_jp.bat            # Japan profile preset
 ├── general_us.bat            # USA profile preset
 └── general_de.bat            # Germany/EU profile preset
-
 ```
 
 ---
 
 ### 🚀 Quick Start
 
-1. Go to the [Releases](https://github.com/) section and download the latest `FearverkDPI.zip`.
+1. Download the latest precompiled release archive from the **Releases** page.
 2. Extract the archive into any folder.
-3. Right-click **`general.bat`** and choose **Run as Administrator**.
-4. Open your browser, Discord, or Roblox Studio — all restricted endpoints will load instantly.
+3. Right-click **`general.bat`** and select **Run as Administrator**.
+4. Launch your browser, Discord, or Roblox Studio — all restricted endpoints will load instantly.
 
 ---
 
 ### 🛠️ Building from Source
 
-Ensure you have MinGW (GCC 10+) or Clang with C++17 support:
+Requirements: MinGW-w64 (GCC 10+) or Clang with C++17 support.
 
 ```bash
-# Compile directly into the bin folder
 g++ -std=c++17 -O3 src/FearverkDPI.cpp -o bin/FearverkDPI.exe -Ilibs -Llibs -lWinDivert -lws2_32 -liphlpapi
-
 ```
 
 ---
 
 ### ⚙️ Command-Line Arguments
 
-| Flag | Description | Default |
-| --- | --- | --- |
-| `-c, --country <CODE>` | Target gateway preset (`AUTO`, `JP`, `US`, `DE`, `NL`, `KR`) | `AUTO` |
-| `--no-quic` | Disable automatic QUIC (UDP 443) packet dropping | `Enabled` |
-| `--no-fake` | Disable fake TLS packet injection | `Enabled` |
-| `--ttl <VAL>` | Configure custom Time-To-Live for fake packets | `3` |
+| Option | Parameter | Description | Default |
+| :--- | :--- | :--- | :--- |
+| `-c, --country` | `<CODE>` | Target gateway profile (`AUTO`, `JP`, `US`, `DE`, `NL`, `KR`) | `AUTO` |
+| `--no-quic` | *None* | Disable automatic QUIC (UDP 443) packet dropping | `Enabled` |
+| `--no-fake` | *None* | Disable fake TLS packet injection | `Enabled` |
+| `--ttl` | `<VAL>` | Custom Time-To-Live for fake packets | `3` |
 
 ---
 
 ## 🇷🇺 Русский
 
 ### 📖 О проекте
+**FearverkDPI** — это высокопроизводительный нативный инструмент для обхода DPI-блокировок провайдеров (ТСПУ), написанный на C++17 с использованием низкоуровневого драйвера `WinDivert`.
 
-**FearverkDPI** — это высокоскоростной инструмент для обхода DPI-блокировок провайдеров, написанный на C++ с использованием драйвера `WinDivert`.
-
-В отличие от классических VPN, программа **не перенаправляет ваш трафик на сторонние серверы**. Она работает локально на уровне ядра Windows: перехватывает исходящие пакеты, на лету разрезает поле `SNI` (доменное имя), сбрасывает протокол QUIC и выполняет инъекцию фейковых TLS-пакетов.
+Программа **не использует чужие серверы** и не является классическим VPN. Весь процесс происходит локально на вашем компьютере: драйвер перехватывает исходящие пакеты перед отправкой в сетевую карту, делит `SNI` (имя сайта) на части, сбрасывает протокол QUIC и отправляет фейковые пакеты с заниженным TTL для ослепления сетевых фильтров.
 
 ### ✨ Главные преимущества
-
-* 🚀 **Максимальная скорость провайдера:** Нулевой пинг в играх и 100% скорости вашего тарифа без чужих медленных VPN-серверов.
-* 🎬 **YouTube в 4K без задержек:** Мгновенный сброс UDP 443 (QUIC) заставляет браузер переключиться на оптимизированный TCP.
-* 🛡️ **Продвинутая десинхронизация TCP/TLS:** Нарезка заголовков `ClientHello` прямо посреди имени домена и генерация Fake-пакетов с заниженным TTL.
-* 🎮 **Работает везде:** Полная поддержка Discord (включая войс-каналы), Roblox Studio (Team Create) и заблокированных сайтов.
-* 📊 **Интерактивный TUI-интерфейс:** Отображение пинга, счетчика искаженных пакетов, пойманных доменов и времени сессии в реальном времени.
+* 🚀 **Максимальная скорость провайдера:** Пинг в играх и звонках не увеличивается, скорость загрузки не режется.
+* 🎬 **Мгновенный запуск YouTube в 4K:** Принудительный перевод браузеров с заблокированного QUIC (UDP 443) на оптимизированный TCP.
+* 🛡️ **Глубокий парсинг TLS:** Нарезка пакета ClientHello точно посередине имени домена и инъекция защитных Fake-пакетов.
+* 🎮 **Работает с играми и приложениями:** Полная работоспособность Discord (включая войс-каналы), Roblox Studio (Team Create) и веб-сайтов.
+* 📊 **Интерактивный TUI-интерфейс:** Консольная панель с мониторингом пинга, счетчиком обработанных доменов и статистикой в реальном времени.
 
 ---
 
 ### 🚀 Быстрый запуск
 
-1. Скачайте архив в разделе [Releases](https://github.com/).
-2. Распакуйте архив в удобное место.
-3. Запустите **`general.bat`** (или профиль нужной страны) **от имени Администратора**.
+1. Скачайте готовый архив в разделе **Releases**.
+2. Распакуйте архив в любую папку.
+3. Запустите файл **`general.bat`** (или профиль нужной страны) **от имени Администратора**.
 4. Готово! YouTube, Discord и Roblox снова работают на полной скорости.
 
 ---
 
 ### 📜 Профили запуска (.bat)
 
-| Скрипт | Назначение |
-| --- | --- |
-| `general.bat` | **Автоматический режим**: выбор узла с наименьшей задержкой |
+| Файл | Описание профиля |
+| :--- | :--- |
+| `general.bat` | **Автоматический выбор**: автоматический замер пинга и выбор наилучшего маршрута |
 | `general_jp.bat` | Профиль с ориентацией на шлюзы Азии и Японии |
-| `general_us.bat` | Профиль с ориентацией на серверы США (Cloudflare) |
+| `general_us.bat` | Профиль с ориентацией на серверы США (Cloudflare Anycast) |
 | `general_de.bat` | Профиль для европейских шлюзов (Франкфурт / Амстердам) |
 
 ---
 
-### 🛠️ Сборка проекта
+### 🛠️ Сборка из исходного кода
 
-Для компиляции через MinGW / GCC выполните команду в корне проекта:
+Для самостоятельной компиляции через MinGW (GCC) выполните команду в корне проекта:
 
 ```bash
 g++ -std=c++17 -O3 src/FearverkDPI.cpp -o bin/FearverkDPI.exe -Ilibs -Llibs -lWinDivert -lws2_32 -liphlpapi
-
 ```
 
 ---
 
 ### ⚠️ Важное примечание (Disclaimer)
 
-Программа требует прав Администратора исключительно для взаимодействия с системным драйвером ядра `WinDivert`. Исходный код полностью открыт, не содержит сторонней телеметрии и не сохраняет пользовательские данные.
+Программе требуются права Администратора исключительно для загрузки подписанного системного драйвера `WinDivert.sys`. Исходный код полностью прозрачен, не собирает телеметрию и не взаимодействует со сторонними серверами.
 
 ---
 
+<div align="center">
+
 **Made with ⚡ for gamers, developers, and open web enthusiasts.**
+
+</div>
